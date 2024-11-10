@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Times</string>
+    <string name="autor">JOÃO VITOR LIMA COSTA - RA: 1110482313015</string>
+
+    <string name="tv_inicio">App Esportivo</string>
+
+    <string name="time">Time</string>
+    <string name="jogador">Jogador</string>
+
+    <string name="et_codigo">Código</string>
+    <string name="et_nome">Nome</string>
+    <string name="et_cidade">Cidade</string>
+
+    <string name="et_id">ID</string>
+    <string name="et_nascimento">Data de Nascimento</string>
+    <string name="et_peso">Peso</string>
+    <string name="et_altura">Altura</string>
+
+    <string name="btn_inserir">Inserir</string>
+    <string name="btn_modificar">Modificar</string>
+    <string name="btn_excluir">Excluir</string>
+    <string name="btn_buscar">Buscar</string>
+    <string name="btn_listar">Listar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
