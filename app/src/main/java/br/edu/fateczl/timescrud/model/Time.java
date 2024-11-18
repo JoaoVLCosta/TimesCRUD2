@@ -1,6 +1,8 @@
 package br.edu.fateczl.timescrud.model;
 
-public class Time {
+import java.time.LocalDate;
+
+public class Time{
     /*
      *@author:<JOÃO VITOR LIMA COSTA>
      */
@@ -40,5 +42,11 @@ public class Time {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    public void organizarDados(String dados) {
+        setCodigo(Integer.parseInt(dados.split(";")[0]));
+        setNome(dados.split(";")[1]);
+        setCidade(dados.split(";")[2]);
     }
 }

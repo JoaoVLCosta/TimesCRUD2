@@ -2,7 +2,7 @@ package br.edu.fateczl.timescrud.model;
 
 import java.time.LocalDate;
 
-public class Jogador {
+public class Jogador{
     /*
      *@author:<JOÃO VITOR LIMA COSTA>
      */
@@ -69,5 +69,13 @@ public class Jogador {
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    public void organizarDados(String dados) {
+        setId(Integer.parseInt(dados.split(";")[0]));
+        setNome(dados.split(";")[1]);
+        setDataNasc(LocalDate.parse(dados.split(";")[2]));
+        setAltura(Float.parseFloat(dados.split(";")[3]));
+        setPeso(Float.parseFloat(dados.split(";")[4]));
     }
 }

@@ -1,4 +1,4 @@
-package br.edu.fateczl.timescrud.controller;
+package br.edu.fateczl.timescrud.persistence;
 
 import java.sql.SQLException;
 import java.util.List;

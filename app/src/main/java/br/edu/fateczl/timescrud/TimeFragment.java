@@ -10,6 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import br.edu.fateczl.timescrud.controller.TimeController;
+import br.edu.fateczl.timescrud.model.Time;
+import br.edu.fateczl.timescrud.persistence.TimeDao;
 
 public class TimeFragment extends Fragment {
     /*
@@ -22,6 +30,10 @@ public class TimeFragment extends Fragment {
 
     private TextView tvListaT;
 
+    private View view;
+
+    private TimeController tCont;
+
     public TimeFragment() {
         super();
     }
@@ -29,7 +41,9 @@ public class TimeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_time, container, false);
+        view = inflater.inflate(R.layout.fragment_time, container, false);
+
+        tCont = new TimeController(new TimeDao(view.getContext()));
 
         btnBuscarT = view.findViewById(R.id.btnBuscarT);
         btnInserirT = view.findViewById(R.id.btnInserirT);
@@ -43,39 +57,96 @@ public class TimeFragment extends Fragment {
 
         tvListaT = view.findViewById(R.id.tvListaT);
 
-        btnInserirT.setOnClickListener(op -> inserir());
-        btnBuscarT.setOnClickListener(op -> buscar());
-        btnExcluirT.setOnClickListener(op -> excluir());
-        btnModificarT.setOnClickListener(op -> modificar());
-        btnListarT.setOnClickListener(op -> listar());
+        btnInserirT.setOnClickListener(op -> acaoInserir());
+        btnBuscarT.setOnClickListener(op -> acaoBuscar());
+        btnExcluirT.setOnClickListener(op -> acaoExcluir());
+        btnModificarT.setOnClickListener(op -> acaoModificar());
+        btnListarT.setOnClickListener(op -> acaoListar());
 
         return view;
     }
 
-    private void inserir() {
-        mostrar("INSERIR");
+    private void acaoInserir() {
+        Time time = montaTime();
+        try {
+            tCont.inserir(time);
+            Toast.makeText(view.getContext(), "Time Inserido com Sucesso", Toast.LENGTH_LONG).show();
+        } catch (SQLException e) {
+            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        limpaCampos();
     }
 
-    private void buscar() {
-        mostrar("BUSCAR");
+    private void acaoBuscar() {
+        if(!etCodigoT.getText().toString().isEmpty()){
+            Time time = montaTime();
+            try {
+                time = tCont.buscar(time);
+                if(time.getNome() != null){
+                    preencheCampos(time);
+                }
+            } catch (SQLException e) {
+                Toast.makeText(view.getContext(), "Time Não Encontrado", Toast.LENGTH_LONG).show();
+                limpaCampos();
+            }
+        }
     }
 
-    private void excluir() {
-        mostrar("EXCLUIR");
+    private void acaoExcluir() {
+        if(!etCodigoT.getText().toString().isEmpty()){
+            Time time = montaTime();
+            try {
+                tCont.deletar(time);
+                Toast.makeText(view.getContext(), "Time Excluido com Sucesso", Toast.LENGTH_LONG).show();
+            } catch (SQLException e) {
+                Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            limpaCampos();
+        }
     }
 
-    private void modificar() {
-        mostrar("MODIFICAR");
+    private void acaoModificar() {
+        Time time = montaTime();
+        try {
+            tCont.modificar(time);
+            Toast.makeText(view.getContext(), "Time Modificado com Sucesso", Toast.LENGTH_LONG).show();
+        } catch (SQLException e) {
+            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        limpaCampos();
     }
 
-    private void listar() {
-        mostrar("LISTAR");
+    private void acaoListar() {
+        try {
+            List<Time> times = tCont.listar();
+            StringBuffer buffer = new StringBuffer();
+            for (Time t : times){
+                buffer.append(t.toString()).append("\n");
+            }
+            tvListaT.setText(buffer.toString());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void mostrar(String texto){
-        texto = texto +
-                "\nDomínimo PARCIALMENTE implementado (Parte 1). Será expandido na Parte 2";
+    private Time montaTime(){
+        Time t = new Time();
+        t.setCodigo(Integer.parseInt(etCodigoT.getText().toString()));
+        t.setNome(etNomeT.getText().toString());
+        t.setCidade(etCidadeT.getText().toString());
 
-        tvListaT.setText(texto);
+        return t;
+    }
+
+    private void preencheCampos(Time t){
+        etCodigoT.setText(String.valueOf(t.getCodigo()));
+        etNomeT.setText(t.getNome());
+        etCidadeT.setText(t.getCidade());
+    }
+
+    private void limpaCampos(){
+        etCodigoT.setText("");
+        etNomeT.setText("");
+        etCidadeT.setText("");
     }
 }
